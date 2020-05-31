@@ -1,14 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { BoardContainer } from './styled';
-import { ToolType } from '../Toolbar/types';
+import { ToolType } from '../../helpers/enums';
 import { useStore } from '../../helpers/useStore';
 import { useObserver } from 'mobx-react-lite';
 import Dancer from '../Dancer';
-
-interface Coords {
-    x: number;
-    y: number;
-}
 
 const Board: React.FC = () => {
     const store = useStore();
@@ -75,7 +70,7 @@ const Board: React.FC = () => {
         const { x, y } = store.board.roundedCoords;
         switch (store.board.tool) {
             case ToolType.Add:
-                return <circle onClick={handleClick} className="hover-circle" cx={x} cy={y} r="7" />;
+                return <circle onClick={handleClick} className="hover-circle" cx={x} cy={y} r="10" />;
             default:
                 return null;
         }

@@ -1,4 +1,4 @@
-import { ToolType } from './../Toolbar/types';
+import { ToolType } from '../../helpers/enums';
 import { action, observable } from 'mobx';
 import { store as Dancer } from '../Dancer';
 import { Store as Root } from '../../helpers/storeProvider';

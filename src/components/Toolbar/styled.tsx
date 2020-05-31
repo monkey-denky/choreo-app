@@ -1,5 +1,9 @@
 import styled from 'styled-components';
-import { ToolbarContainerInterface } from './types';
+
+export interface ToolbarContainerInterface {
+    selected: number;
+    transition?: number;
+}
 
 export const ToolbarContainer = styled.div<ToolbarContainerInterface>`
     position: absolute;

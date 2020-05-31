@@ -5,7 +5,7 @@ import { MousePointer } from '@styled-icons/fa-solid/MousePointer';
 import { TransferWithinAStation } from '@styled-icons/material/TransferWithinAStation';
 // import { FlowLine } from '@styled-icons/entypo/FlowLine';
 import { ToolbarContainer } from './styled';
-import { ToolType } from './types';
+import { ToolType } from '../../helpers/enums';
 import { useStore } from '../../helpers/useStore';
 import { useObserver } from 'mobx-react-lite';
 
