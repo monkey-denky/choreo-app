@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import { Store as Root } from '../../helpers/storeProvider';
 
 function getId(x: number, y: number): number {
@@ -48,4 +48,9 @@ export default class Store {
     setSelected = (selected: boolean): void => {
         this.selected = selected;
     };
+
+    @computed
+    get coords(): Coords {
+        return { x: this.x, y: this.y };
+    }
 }

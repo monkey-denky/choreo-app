@@ -24,7 +24,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
         }
     }, [board]);
 
-    function updateCoords(event: React.MouseEvent): void {
+    function onMouseMove(event: React.MouseEvent): void {
         const { clientX, clientY } = event;
         event.stopPropagation();
         event.preventDefault();
@@ -36,14 +36,13 @@ const Board: React.FC<BoardProps> = ({ board }) => {
     function onMouseUp(event: React.MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
-        if (board.selected) {
+        if (store.selectedDancer) {
             const { x, y } = store.board.roundedCoords;
-            board.selected.changeCoords(x, y);
+            store.selectedDancer.changeCoords(x, y);
             if (store.tools.selected === ToolType.Transition) {
-                board.selected.addPath(x, y);
-                board.selected.setSelected(false);
+                store.selectedDancer.addPath(x, y);
+                store.selectedDancer.setSelected(false);
             }
-            board.setSelected(null);
         }
     }
 
@@ -87,7 +86,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
                 ref={svgRef}
                 onMouseUp={onMouseUp}
                 onMouseEnter={mouseEnter}
-                onMouseMove={updateCoords}
+                onMouseMove={onMouseMove}
                 onMouseLeave={mouseLeave}
                 width="100%"
                 height="100%"

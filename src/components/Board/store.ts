@@ -1,6 +1,4 @@
-import { ToolType } from '../../helpers/enums';
-import { action, observable } from 'mobx';
-import { store as Dancer } from '../Dancer';
+import { action, observable, computed } from 'mobx';
 import { Store as Root } from '../../helpers/storeProvider';
 
 interface Properties {
@@ -44,9 +42,6 @@ export default class Store {
     @observable
     y = 0;
 
-    @observable
-    selected: Dancer | null = null;
-
     constructor(root: Root) {
         this.root = root;
     }
@@ -74,34 +69,27 @@ export default class Store {
         const coordY = y - this.yOffset;
         this.x = coordX;
         this.y = coordY;
-        if (this.selected) {
-            switch (this.root.tools.selected) {
-                case ToolType.Transition:
-                    this.selected.changeCoords(coordX, coordY);
-                    break;
-                default:
-                    this.selected.changeCoords(coordX, coordY);
-                    break;
-            }
+        if (this.root.selectedDancer) {
+            this.root.selectedDancer.changeCoords(coordX, coordY);
         }
     };
 
-    @action
-    setSelected = (selected: Dancer | null): void => {
-        this.selected = selected;
-    };
-
+    @computed
     get scaledWidth(): number {
         return this.width * this.scale;
     }
 
+    @computed
     get scaledHeight(): number {
         return this.width * this.scale;
     }
 
+    @computed
     get coords(): Coords {
         return { x: this.x, y: this.y };
     }
+
+    @computed
     get roundedCoords(): Coords {
         const roundedX = Math.round(this.x / this.squareSize) * this.squareSize;
         const roundedY = Math.round(this.y / this.squareSize) * this.squareSize;

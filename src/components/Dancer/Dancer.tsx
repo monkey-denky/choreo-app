@@ -27,7 +27,6 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
             event.preventDefault();
             event.stopPropagation();
             dancer.setSelected(true);
-            store.board.setSelected(dancer);
         }
     }
 
@@ -35,9 +34,9 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
         if (store.tools.selected === ToolType.Transition) {
             // TODO add order number of Transition
 
-            if (store.board.selected === dancer) {
-                const start = store.board.selected.path[0];
-                const end = store.board.coords;
+            if (dancer.selected) {
+                const start = dancer.path[0];
+                const end = dancer.coords;
                 return (
                     <>
                         <StyledCircle className="former-shadow" cx={start.x} cy={start.y} r="10" />

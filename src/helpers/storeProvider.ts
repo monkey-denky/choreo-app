@@ -3,7 +3,7 @@ import { store as Board } from '../components/Board';
 import { store as Dancer } from '../components/Dancer';
 import { store as Toolbar } from '../components/Toolbar';
 
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 
 interface DancerMap {
     [key: string]: Dancer;
@@ -34,6 +34,15 @@ export class Store {
             delete this.dancers[id];
         }
     };
+
+    @computed
+    get selectedDancer(): Dancer | null {
+        const result = Object.values(this.dancers).find((dancer) => dancer.selected);
+        if (result === undefined) {
+            return null;
+        }
+        return result;
+    }
 
     @action
     addFrame = (): void => {
