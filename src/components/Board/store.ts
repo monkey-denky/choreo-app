@@ -1,3 +1,4 @@
+import { ToolType } from './../Toolbar/types';
 import { action, observable } from 'mobx';
 import { store as Dancer } from '../Dancer';
 
@@ -43,6 +44,9 @@ export default class Store {
     @observable
     selected: Dancer | null = null;
 
+    @observable
+    tool: ToolType = ToolType.Default;
+
     @action
     changeDimensions = ({
         width = this.width,
@@ -67,13 +71,26 @@ export default class Store {
         this.x = coordX;
         this.y = coordY;
         if (this.selected) {
-            this.selected.changeCoords(coordX, coordY);
+            switch (this.tool) {
+                case ToolType.Transition:
+                    this.selected.changeCoords(coordX, coordY);
+                    this.selected.addPath(coordX, coordY);
+                    break;
+                default:
+                    this.selected.changeCoords(coordX, coordY);
+                    break;
+            }
         }
     };
 
     @action
     setSelected = (selected: Dancer | null): void => {
         this.selected = selected;
+    };
+
+    @action
+    setTool = (tool: ToolType): void => {
+        this.tool = tool;
     };
 
     get scaledWidth(): number {

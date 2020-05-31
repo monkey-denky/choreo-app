@@ -7,10 +7,14 @@ export const BoardContainer = styled.div<BoardContainerInterface>`
     svg {
         border: 1px solid ${({ theme }): string => theme.colors.white};
         fill: rgba(0, 0, 0, 0);
+        line {
+            stroke-width: 2;
+            stroke: ${({ theme }): string => theme.colors.white};
+        }
         circle {
             stroke-width: 1;
-            stroke: ${({ theme }): string => theme.colors.white};
-            fill: ${({ theme }): string => theme.colors.white};
+            stroke: ${({ theme }): string => theme.colors.primary};
+            fill: ${({ theme }): string => theme.colors.primary};
             cursor: pointer;
             &.hover-circle {
                 opacity: 0.5;

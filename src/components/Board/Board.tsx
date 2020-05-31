@@ -26,20 +26,30 @@ const Board: React.FC = () => {
 
     function updateCoords(event: React.MouseEvent): void {
         const { clientX, clientY } = event;
+        event.stopPropagation();
+        event.preventDefault();
         if (entered) {
             store.board.changeCoords(clientX, clientY);
         }
     }
 
+    function onMouseUp(event: React.MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
+        if (store.board.selected) {
+            const { x, y } = store.board.roundedCoords;
+            store.board.selected.changeCoords(x, y);
+            store.board.setSelected(null);
+        }
+    }
+
     function handleClick() {
         if (entered) {
-            const squareSize = store.board.squareSize;
             const { x, y } = store.board.roundedCoords;
-            switch (store.tools.selected) {
+            switch (store.board.tool) {
                 case ToolType.Add:
                     store.addDancer(x, y);
                     break;
-
                 default:
                     return;
             }
@@ -59,7 +69,7 @@ const Board: React.FC = () => {
             return null;
         }
         const { x, y } = store.board.roundedCoords;
-        switch (store.tools.selected) {
+        switch (store.board.tool) {
             case ToolType.Add:
                 return <circle onClick={handleClick} className="hover-circle" cx={x} cy={y} r="7" />;
             default:
@@ -71,6 +81,7 @@ const Board: React.FC = () => {
         <BoardContainer width={store.board.scaledWidth} height={store.board.scaledHeight}>
             <svg
                 ref={svgRef}
+                onMouseUp={onMouseUp}
                 onMouseEnter={mouseEnter}
                 onMouseMove={updateCoords}
                 onMouseLeave={mouseLeave}

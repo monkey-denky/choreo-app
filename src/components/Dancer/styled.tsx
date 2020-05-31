@@ -7,6 +7,7 @@ export const DancerContainer = styled.div<DancerContainerInterface>`
     svg {
         border: 1px solid ${({ theme }): string => theme.colors.white};
         fill: rgba(0, 0, 0, 0);
+
         circle {
             stroke-width: 1;
             stroke: ${({ theme }): string => theme.colors.white};

@@ -13,20 +13,20 @@ const Toolbar: React.FC = () => {
     const store = useStore();
 
     function selectDefault() {
-        store.tools.changeSelected(ToolType.Default);
+        store.board.setTool(ToolType.Default);
     }
     function selectAdd() {
-        store.tools.changeSelected(ToolType.Add);
+        store.board.setTool(ToolType.Add);
     }
     function selectRemove() {
-        store.tools.changeSelected(ToolType.Remove);
+        store.board.setTool(ToolType.Remove);
     }
 
     function selectTransition() {
-        store.tools.changeSelected(ToolType.Transition);
+        store.board.setTool(ToolType.Transition);
     }
-    return useObserver(()=>(
-        <ToolbarContainer selected={store.tools.selected}>
+    return useObserver(() => (
+        <ToolbarContainer selected={store.board.tool}>
             <MousePointer onClick={selectDefault} size="1.6em"></MousePointer>
             <Plus onClick={selectAdd} size="1.6em"></Plus>
             <Minus onClick={selectRemove} size="1.6em"></Minus>
