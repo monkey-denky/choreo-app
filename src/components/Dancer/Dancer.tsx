@@ -10,6 +10,7 @@ type DancerProps = {
 
 const Dancer: React.FC<DancerProps> = ({ dancer }) => {
     const store = useStore();
+
     function handleClick() {
         switch (store.tools.selected) {
             case ToolType.Remove:
@@ -20,11 +21,34 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
         }
     }
 
-    // onMouseDown={mouseDown}
-    // onMouseUp={mouseUp}
-    // onMouseMove={mouseMove}
-    // onMouseLeave={mouseLeave}
-    return useObserver(()=><circle onClick={handleClick} cx={dancer.x} cy={dancer.y} r="10" />);
+    function onMouseDown(event: React.MouseEvent) {
+        if (store.tools.selected === ToolType.Default) {
+            event.preventDefault();
+            event.stopPropagation();
+            store.board.setSelected(dancer);
+        }
+    }
+
+    function onMouseUp(event: React.MouseEvent) {
+        if (store.board.selected) {
+            event.stopPropagation();
+            event.preventDefault();
+            store.board.setSelected(null);
+            const { x, y } = store.board.roundedCoords;
+            dancer.changeCoords(x, y);
+        }
+    }
+
+    return useObserver(() => (
+        <circle
+            onClick={handleClick}
+            onMouseDown={onMouseDown}
+            onMouseUp={onMouseUp}
+            cx={dancer.x}
+            cy={dancer.y}
+            r="10"
+        />
+    ));
 };
 
 export default Dancer;

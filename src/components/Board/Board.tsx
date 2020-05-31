@@ -13,10 +13,6 @@ interface Coords {
 const Board: React.FC = () => {
     const store = useStore();
     const [entered, setEntered] = useState<boolean>(false);
-    const [coords, setCoords] = useState<Coords>({
-        x: 0,
-        y: 0,
-    });
 
     const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -26,30 +22,22 @@ const Board: React.FC = () => {
             const { left, top } = rect;
             store.board.changeDimensions({ xOffset: left, yOffset: top });
         }
-    },[store.board]);
-
-    const { x, y } = coords;
+    }, [store.board]);
 
     function updateCoords(event: React.MouseEvent): void {
         const { clientX, clientY } = event;
-        const { xOffset, yOffset } = store.board;
         if (entered) {
-            const coordX = clientX - xOffset;
-            const coordY = clientY - yOffset;
-            setCoords((value) => {
-                return { ...value, x: coordX, y: coordY };
-            });
+            store.board.changeCoords(clientX, clientY);
         }
     }
 
     function handleClick() {
         if (entered) {
             const squareSize = store.board.squareSize;
-            const coordX = Math.round(x / squareSize) * squareSize;
-            const coordY = Math.round(y / squareSize) * squareSize;
+            const { x, y } = store.board.roundedCoords;
             switch (store.tools.selected) {
                 case ToolType.Add:
-                    store.addDancer(coordX, coordY);
+                    store.addDancer(x, y);
                     break;
 
                 default:
@@ -63,9 +51,6 @@ const Board: React.FC = () => {
     }
 
     function mouseLeave() {
-        setCoords((value) => {
-            return { ...value, x: 0, y: 0 };
-        });
         setEntered(false);
     }
 
@@ -73,25 +58,16 @@ const Board: React.FC = () => {
         if (!entered) {
             return null;
         }
-        const roundedX = Math.round(x / store.board.squareSize) * store.board.squareSize;
-        const roundedY = Math.round(y / store.board.squareSize) * store.board.squareSize;
+        const { x, y } = store.board.roundedCoords;
         switch (store.tools.selected) {
             case ToolType.Add:
-                return (
-                    <circle
-                        onClick={handleClick}
-                        className="hover-circle"
-                        cx={roundedX}
-                        cy={roundedY}
-                        r="7"
-                    />
-                );
+                return <circle onClick={handleClick} className="hover-circle" cx={x} cy={y} r="7" />;
             default:
                 return null;
         }
     }
 
-    return useObserver(()=>(
+    return useObserver(() => (
         <BoardContainer width={store.board.scaledWidth} height={store.board.scaledHeight}>
             <svg
                 ref={svgRef}

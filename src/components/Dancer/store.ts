@@ -1,4 +1,4 @@
-import { action, observable, computed } from 'mobx';
+import { action, observable } from 'mobx';
 
 function getId(x: number, y: number): number {
     return ((x + y) * (x + y + 1)) / 2 + x;
@@ -21,9 +21,4 @@ export default class Store {
         this.x = x;
         this.y = y;
     };
-
-    @computed
-    get coords(): { x: number; y: number } {
-        return { x: this.x, y: this.y };
-    }
 }
