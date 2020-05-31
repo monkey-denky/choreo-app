@@ -34,7 +34,7 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
         if (store.board.tool === ToolType.Transition) {
             // TODO add order number of Transition
 
-            if (store.board.selected) {
+            if (store.board.selected === dancer) {
                 const start = store.board.selected.path[0];
                 const end = store.board.coords;
                 return (
@@ -44,7 +44,8 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
                         <circle onClick={handleClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
                     </>
                 );
-            } else if (dancer.path.length > 1) {
+            }
+            if (dancer.path.length > 1) {
                 const lastIndex = dancer.path.length - 1;
                 const start = dancer.path[lastIndex - 1];
                 const end = dancer.path[lastIndex];
@@ -56,6 +57,7 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
                     </>
                 );
             }
+            return <circle onClick={handleClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
         }
 
         return <circle onClick={handleClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
