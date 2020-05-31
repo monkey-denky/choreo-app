@@ -34,7 +34,7 @@ const Board: React.FC = () => {
         if (store.board.selected) {
             const { x, y } = store.board.roundedCoords;
             store.board.selected.changeCoords(x, y);
-            if (store.board.tool === ToolType.Transition) {
+            if (store.tools.selected === ToolType.Transition) {
                 store.board.selected.addPath(x, y);
                 store.board.selected.setSelected(false);
             }
@@ -45,7 +45,7 @@ const Board: React.FC = () => {
     function handleClick() {
         if (entered) {
             const { x, y } = store.board.roundedCoords;
-            switch (store.board.tool) {
+            switch (store.tools.selected) {
                 case ToolType.Add:
                     store.addDancer(x, y);
                     break;
@@ -68,7 +68,7 @@ const Board: React.FC = () => {
             return null;
         }
         const { x, y } = store.board.roundedCoords;
-        switch (store.board.tool) {
+        switch (store.tools.selected) {
             case ToolType.Add:
                 return <circle onClick={handleClick} className="hover-circle" cx={x} cy={y} r="10" />;
             default:

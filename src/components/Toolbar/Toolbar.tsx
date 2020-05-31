@@ -6,27 +6,30 @@ import { TransferWithinAStation } from '@styled-icons/material/TransferWithinASt
 // import { FlowLine } from '@styled-icons/entypo/FlowLine';
 import { ToolbarContainer } from './styled';
 import { ToolType } from '../../helpers/enums';
-import { useStore } from '../../helpers/useStore';
 import { useObserver } from 'mobx-react-lite';
+import ToolbarClass from './store';
 
-const Toolbar: React.FC = () => {
-    const store = useStore();
+type ToolbarProps = {
+    toolbar: ToolbarClass;
+};
 
+const Toolbar: React.FC<ToolbarProps> = ({ toolbar }) => {
     function selectDefault() {
-        store.board.setTool(ToolType.Default);
+        toolbar.setSelected(ToolType.Default);
     }
     function selectAdd() {
-        store.board.setTool(ToolType.Add);
+        toolbar.setSelected(ToolType.Add);
     }
     function selectRemove() {
-        store.board.setTool(ToolType.Remove);
+        toolbar.setSelected(ToolType.Remove);
     }
 
     function selectTransition() {
-        store.board.setTool(ToolType.Transition);
+        toolbar.setSelected(ToolType.Transition);
     }
+
     return useObserver(() => (
-        <ToolbarContainer selected={store.board.tool}>
+        <ToolbarContainer selected={toolbar.selected}>
             <MousePointer onClick={selectDefault} size="1.6em"></MousePointer>
             <Plus onClick={selectAdd} size="1.6em"></Plus>
             <Minus onClick={selectRemove} size="1.6em"></Minus>

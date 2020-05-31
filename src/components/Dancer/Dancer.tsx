@@ -13,7 +13,7 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
     const store = useStore();
 
     function handleClick() {
-        switch (store.board.tool) {
+        switch (store.tools.selected) {
             case ToolType.Remove:
                 store.removeDancer(dancer.id);
                 break;
@@ -23,7 +23,7 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
     }
 
     function onMouseDown(event: React.MouseEvent) {
-        if (store.board.tool === ToolType.Default || store.board.tool === ToolType.Transition) {
+        if (store.tools.selected === ToolType.Default || store.tools.selected === ToolType.Transition) {
             event.preventDefault();
             event.stopPropagation();
             dancer.setSelected(true);
@@ -32,7 +32,7 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
     }
 
     function renderContent() {
-        if (store.board.tool === ToolType.Transition) {
+        if (store.tools.selected === ToolType.Transition) {
             // TODO add order number of Transition
 
             if (store.board.selected === dancer) {

@@ -4,6 +4,7 @@ import Board from './components/Board';
 import styled, { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { primaryTheme } from './themes';
 import Toolbar from './components/Toolbar';
+import { useStore } from './helpers/useStore';
 
 const GlobalStyle = createGlobalStyle`
   body, #root {
@@ -33,13 +34,14 @@ const Container = styled.div`
 `;
 
 const App: React.FC = () => {
+    const store = useStore();
     return (
         <ThemeProvider theme={primaryTheme}>
             <GlobalStyle></GlobalStyle>
             <Container>
                 <div>
                     <Board />
-                    <Toolbar />
+                    <Toolbar toolbar={store.tools} />
                 </div>
                 {/* <Controls /> */}
             </Container>

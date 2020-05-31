@@ -47,9 +47,6 @@ export default class Store {
     @observable
     selected: Dancer | null = null;
 
-    @observable
-    tool: ToolType = ToolType.Default;
-
     constructor(root: Root) {
         this.root = root;
     }
@@ -78,7 +75,7 @@ export default class Store {
         this.x = coordX;
         this.y = coordY;
         if (this.selected) {
-            switch (this.tool) {
+            switch (this.root.tools.selected) {
                 case ToolType.Transition:
                     this.selected.changeCoords(coordX, coordY);
                     break;
@@ -92,11 +89,6 @@ export default class Store {
     @action
     setSelected = (selected: Dancer | null): void => {
         this.selected = selected;
-    };
-
-    @action
-    setTool = (tool: ToolType): void => {
-        this.tool = tool;
     };
 
     get scaledWidth(): number {
