@@ -39,6 +39,10 @@ const Board: React.FC = () => {
         if (store.board.selected) {
             const { x, y } = store.board.roundedCoords;
             store.board.selected.changeCoords(x, y);
+            if (store.board.tool === ToolType.Transition) {
+                store.board.selected.addPath(x, y);
+                store.board.selected.setSelected(false);
+            }
             store.board.setSelected(null);
         }
     }

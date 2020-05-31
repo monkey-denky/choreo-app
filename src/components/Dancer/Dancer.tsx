@@ -25,25 +25,43 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
         if (store.board.tool === ToolType.Default || store.board.tool === ToolType.Transition) {
             event.preventDefault();
             event.stopPropagation();
+            dancer.setSelected(true);
             store.board.setSelected(dancer);
         }
     }
 
-    function renderPath() {
-        if (store.board.tool === ToolType.Transition && store.board.selected) {
+    function renderContent() {
+        if (store.board.tool === ToolType.Transition) {
             // TODO add order number of Transition
-            const start = store.board.selected.path[0];
-            const end = store.board.coords;
-            return <line strokeDasharray="4" x1={start.x} y1={start.y} x2={end.x} y2={end.y}></line>;
+
+            if (store.board.selected) {
+                const start = store.board.selected.path[0];
+                const end = store.board.coords;
+                return (
+                    <>
+                        <circle className="former-shadow" cx={start.x} cy={start.y} r="10" />
+                        <line strokeDasharray="4" x1={start.x} y1={start.y} x2={end.x} y2={end.y}></line>;
+                        <circle onClick={handleClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
+                    </>
+                );
+            } else if (dancer.path.length > 1) {
+                const lastIndex = dancer.path.length - 1;
+                const start = dancer.path[lastIndex - 1];
+                const end = dancer.path[lastIndex];
+                return (
+                    <>
+                        <circle className="former-shadow" cx={start.x} cy={start.y} r="10" />
+                        <line strokeDasharray="4" x1={start.x} y1={start.y} x2={end.x} y2={end.y}></line>;
+                        <circle onClick={handleClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
+                    </>
+                );
+            }
         }
+
+        return <circle onClick={handleClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
     }
 
-    return useObserver(() => (
-        <>
-            {renderPath()}
-            <circle onClick={handleClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />
-        </>
-    ));
+    return useObserver(() => renderContent());
 };
 
 export default Dancer;

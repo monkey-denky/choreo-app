@@ -1,6 +1,7 @@
 import { ToolType } from './../Toolbar/types';
 import { action, observable } from 'mobx';
 import { store as Dancer } from '../Dancer';
+import { Store as Root } from '../../helpers/storeProvider';
 
 interface Properties {
     width?: number;
@@ -17,6 +18,8 @@ interface Coords {
 }
 
 export default class Store {
+    root: Root;
+
     @observable
     width = 7;
 
@@ -47,6 +50,10 @@ export default class Store {
     @observable
     tool: ToolType = ToolType.Default;
 
+    constructor(root: Root) {
+        this.root = root;
+    }
+
     @action
     changeDimensions = ({
         width = this.width,
@@ -74,7 +81,6 @@ export default class Store {
             switch (this.tool) {
                 case ToolType.Transition:
                     this.selected.changeCoords(coordX, coordY);
-                    this.selected.addPath(coordX, coordY);
                     break;
                 default:
                     this.selected.changeCoords(coordX, coordY);

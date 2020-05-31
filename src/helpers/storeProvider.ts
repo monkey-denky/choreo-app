@@ -3,7 +3,7 @@ import { store as Board } from '../components/Board';
 import { store as Dancer } from '../components/Dancer';
 import { store as Toolbar } from '../components/Toolbar';
 
-import { action } from 'mobx';
+import { action, observable } from 'mobx';
 
 interface DancerMap {
     [key: string]: Dancer;
@@ -15,14 +15,16 @@ function getId(x: number, y: number): number {
 
 export class Store {
     dancers: DancerMap = {};
-    board: Board = new Board();
+    board: Board = new Board(this);
     tools: Toolbar = new Toolbar();
+    @observable
+    frames: number[] = [1];
 
     @action
     addDancer = (x: number, y: number): void => {
         const id = getId(x, y);
         if (!this.dancers[id]) {
-            this.dancers[id] = new Dancer(x, y);
+            this.dancers[id] = new Dancer(this, x, y);
         }
     };
 
@@ -31,6 +33,11 @@ export class Store {
         if (this.dancers[id]) {
             delete this.dancers[id];
         }
+    };
+
+    @action
+    addFrame = (): void => {
+        this.frames.push(1);
     };
 }
 

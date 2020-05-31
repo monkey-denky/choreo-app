@@ -16,6 +16,10 @@ export const BoardContainer = styled.div<BoardContainerInterface>`
             stroke: ${({ theme }): string => theme.colors.primary};
             fill: ${({ theme }): string => theme.colors.primary};
             cursor: pointer;
+            &.former-shadow {
+                stroke-dasharray: 4;
+                fill: rgba(0, 0, 0, 0);
+            }
             &.hover-circle {
                 opacity: 0.5;
                 transition: ${({ theme }): string => theme.transitions.default};
