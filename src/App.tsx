@@ -40,7 +40,7 @@ const App: React.FC = () => {
             <GlobalStyle></GlobalStyle>
             <Container>
                 <div>
-                    <Board />
+                    <Board board={store.board} />
                     <Toolbar toolbar={store.tools} />
                 </div>
                 {/* <Controls /> */}

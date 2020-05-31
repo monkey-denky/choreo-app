@@ -4,8 +4,13 @@ import { ToolType } from '../../helpers/enums';
 import { useStore } from '../../helpers/useStore';
 import { useObserver } from 'mobx-react-lite';
 import Dancer from '../Dancer';
+import BoardClass from './store';
 
-const Board: React.FC = () => {
+type BoardProps = {
+    board: BoardClass;
+};
+
+const Board: React.FC<BoardProps> = ({ board }) => {
     const store = useStore();
     const [entered, setEntered] = useState<boolean>(false);
 
@@ -15,36 +20,36 @@ const Board: React.FC = () => {
         if (svgRef.current != null) {
             const rect = svgRef.current.getBoundingClientRect();
             const { left, top } = rect;
-            store.board.changeDimensions({ xOffset: left, yOffset: top });
+            board.changeDimensions({ xOffset: left, yOffset: top });
         }
-    }, [store.board]);
+    }, [board]);
 
     function updateCoords(event: React.MouseEvent): void {
         const { clientX, clientY } = event;
         event.stopPropagation();
         event.preventDefault();
         if (entered) {
-            store.board.changeCoords(clientX, clientY);
+            board.changeCoords(clientX, clientY);
         }
     }
 
     function onMouseUp(event: React.MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
-        if (store.board.selected) {
+        if (board.selected) {
             const { x, y } = store.board.roundedCoords;
-            store.board.selected.changeCoords(x, y);
+            board.selected.changeCoords(x, y);
             if (store.tools.selected === ToolType.Transition) {
-                store.board.selected.addPath(x, y);
-                store.board.selected.setSelected(false);
+                board.selected.addPath(x, y);
+                board.selected.setSelected(false);
             }
-            store.board.setSelected(null);
+            board.setSelected(null);
         }
     }
 
     function handleClick() {
         if (entered) {
-            const { x, y } = store.board.roundedCoords;
+            const { x, y } = board.roundedCoords;
             switch (store.tools.selected) {
                 case ToolType.Add:
                     store.addDancer(x, y);
@@ -67,7 +72,7 @@ const Board: React.FC = () => {
         if (!entered) {
             return null;
         }
-        const { x, y } = store.board.roundedCoords;
+        const { x, y } = board.roundedCoords;
         switch (store.tools.selected) {
             case ToolType.Add:
                 return <circle onClick={handleClick} className="hover-circle" cx={x} cy={y} r="10" />;
@@ -77,7 +82,7 @@ const Board: React.FC = () => {
     }
 
     return useObserver(() => (
-        <BoardContainer width={store.board.scaledWidth} height={store.board.scaledHeight}>
+        <BoardContainer width={board.scaledWidth} height={board.scaledHeight}>
             <svg
                 ref={svgRef}
                 onMouseUp={onMouseUp}
@@ -89,16 +94,11 @@ const Board: React.FC = () => {
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <defs>
-                    <pattern
-                        id="grid"
-                        width={store.board.squareSize}
-                        height={store.board.squareSize}
-                        patternUnits="userSpaceOnUse"
-                    >
-                        <rect width={store.board.squareSize} height={store.board.squareSize} />
+                    <pattern id="grid" width={board.squareSize} height={board.squareSize} patternUnits="userSpaceOnUse">
+                        <rect width={board.squareSize} height={board.squareSize} />
                         <path
                             className="grid"
-                            d={`M ${store.board.squareSize} 0 L 0 0 0 ${store.board.squareSize}`}
+                            d={`M ${board.squareSize} 0 L 0 0 0 ${board.squareSize}`}
                             fill="none"
                             stroke="gray"
                             strokeWidth="1"
