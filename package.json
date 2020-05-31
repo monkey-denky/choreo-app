@@ -53,6 +53,7 @@
         "eslint-plugin-react": "^7.20.0",
         "husky": "^4.2.5",
         "lint-staged": "^10.2.7",
+        "mobx-logger": "^0.7.1",
         "prettier": "^2.0.5"
     },
     "husky": {

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BoardContainer } from './styled';
 import { ToolType } from '../Toolbar/types';
 import { useStore } from '../../helpers/useStore';
-import { observer } from 'mobx-react';
+import { useObserver } from 'mobx-react-lite';
 import Dancer from '../Dancer';
 
 interface Coords {
@@ -10,7 +10,7 @@ interface Coords {
     y: number;
 }
 
-const Board: React.FC = observer(() => {
+const Board: React.FC = () => {
     const store = useStore();
     const [entered, setEntered] = useState<boolean>(false);
     const [coords, setCoords] = useState<Coords>({
@@ -26,7 +26,7 @@ const Board: React.FC = observer(() => {
             const { left, top } = rect;
             store.board.changeDimensions({ xOffset: left, yOffset: top });
         }
-    });
+    },[store.board]);
 
     const { x, y } = coords;
 
@@ -73,14 +73,16 @@ const Board: React.FC = observer(() => {
         if (!entered) {
             return null;
         }
+        const roundedX = Math.round(x / store.board.squareSize) * store.board.squareSize;
+        const roundedY = Math.round(y / store.board.squareSize) * store.board.squareSize;
         switch (store.tools.selected) {
             case ToolType.Add:
                 return (
                     <circle
                         onClick={handleClick}
                         className="hover-circle"
-                        cx={store.board.roundedX(x)}
-                        cy={store.board.roundedY(y)}
+                        cx={roundedX}
+                        cy={roundedY}
                         r="7"
                     />
                 );
@@ -89,7 +91,7 @@ const Board: React.FC = observer(() => {
         }
     }
 
-    return (
+    return useObserver(()=>(
         <BoardContainer width={store.board.scaledWidth} height={store.board.scaledHeight}>
             <svg
                 ref={svgRef}
@@ -124,7 +126,7 @@ const Board: React.FC = observer(() => {
                 {renderHoverCircle()}
             </svg>
         </BoardContainer>
-    );
-});
+    ));
+};
 
 export default Board;

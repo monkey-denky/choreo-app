@@ -7,9 +7,9 @@ import { TransferWithinAStation } from '@styled-icons/material/TransferWithinASt
 import { ToolbarContainer } from './styled';
 import { ToolType } from './types';
 import { useStore } from '../../helpers/useStore';
-import { observer } from 'mobx-react';
+import { useObserver } from 'mobx-react-lite';
 
-const Toolbar: React.FC = observer(() => {
+const Toolbar: React.FC = () => {
     const store = useStore();
 
     function selectDefault() {
@@ -25,14 +25,14 @@ const Toolbar: React.FC = observer(() => {
     function selectTransition() {
         store.tools.changeSelected(ToolType.Transition);
     }
-    return (
+    return useObserver(()=>(
         <ToolbarContainer selected={store.tools.selected}>
             <MousePointer onClick={selectDefault} size="1.6em"></MousePointer>
             <Plus onClick={selectAdd} size="1.6em"></Plus>
             <Minus onClick={selectRemove} size="1.6em"></Minus>
             <TransferWithinAStation onClick={selectTransition} size="1.6em"></TransferWithinAStation>
         </ToolbarContainer>
-    );
-});
+    ));
+};
 
 export default Toolbar;

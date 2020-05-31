@@ -52,12 +52,4 @@ export default class Store {
     get scaledHeight(): number {
         return this.width * this.scale;
     }
-
-    roundedX(x: number): number {
-        return Math.round(x / this.squareSize) * this.squareSize;
-    }
-
-    roundedY(y: number): number {
-        return Math.round(y / this.squareSize) * this.squareSize;
-    }
 }

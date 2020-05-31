@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { StoreProvider, Store } from './helpers/storeProvider';
+import {enableLogging} from 'mobx-logger';
 
 const store = new Store();
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore - for debugging
-window.store = store;
+enableLogging({reaction:false});
 
 ReactDOM.render(
     <React.StrictMode>

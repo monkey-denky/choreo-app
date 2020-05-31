@@ -2,13 +2,13 @@ import React from 'react';
 import { ToolType } from '../Toolbar/types';
 import DancerClass from './store';
 import { useStore } from '../../helpers/useStore';
-import { observer } from 'mobx-react';
+import { useObserver } from 'mobx-react-lite';
 
 type DancerProps = {
     dancer: DancerClass;
 };
 
-const Dancer: React.FC<DancerProps> = observer(({ dancer }) => {
+const Dancer: React.FC<DancerProps> = ({ dancer }) => {
     const store = useStore();
     function handleClick() {
         switch (store.tools.selected) {
@@ -24,7 +24,7 @@ const Dancer: React.FC<DancerProps> = observer(({ dancer }) => {
     // onMouseUp={mouseUp}
     // onMouseMove={mouseMove}
     // onMouseLeave={mouseLeave}
-    return <circle onClick={handleClick} cx={dancer.x} cy={dancer.y} r="10" />;
-});
+    return useObserver(()=><circle onClick={handleClick} cx={dancer.x} cy={dancer.y} r="10" />);
+};
 
 export default Dancer;
