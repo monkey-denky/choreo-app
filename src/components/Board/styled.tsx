@@ -16,7 +16,6 @@ export const BoardContainer = styled.div<BoardContainerInterface>`
             fill: ${({ theme }): string => theme.colors.white};
             opacity: 0.4;
             transition: ${({ theme }): string => theme.transitions.default};
-            transition-property: opacity;
             &:hover {
                 opacity: 1;
                 cursor: pointer;
