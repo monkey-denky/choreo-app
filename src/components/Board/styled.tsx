@@ -12,9 +12,9 @@ export const BoardContainer = styled.div<BoardContainerInterface>`
         fill: rgba(0, 0, 0, 0);
         .hover-circle {
             stroke-width: 1;
-            stroke: ${({ theme }): string => theme.colors.gray};
-            fill: ${({ theme }): string => theme.colors.gray};
-            opacity: 0.5;
+            stroke: ${({ theme }): string => theme.colors.white};
+            fill: ${({ theme }): string => theme.colors.white};
+            opacity: 0.4;
             transition: ${({ theme }): string => theme.transitions.default};
             transition-property: opacity;
             &:hover {

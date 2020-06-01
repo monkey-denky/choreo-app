@@ -12,14 +12,10 @@ type DancerProps = {
 const Dancer: React.FC<DancerProps> = ({ dancer }) => {
     const store = useStore();
 
-    function handleClick() {
-        switch (store.tools.selected) {
-            case ToolType.Remove:
-                store.removeDancer(dancer.id);
-                break;
-            default:
-                return;
-        }
+    function onClick(event: React.MouseEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+        store.tools.preciseClick();
     }
 
     function onMouseDown(event: React.MouseEvent) {
@@ -41,7 +37,7 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
                     <>
                         <StyledCircle className="former-shadow" cx={start.x} cy={start.y} r="10" />
                         <StyledLine x1={start.x} y1={start.y} x2={end.x} y2={end.y} />
-                        <StyledCircle onClick={handleClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
+                        <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
                     </>
                 );
             }
@@ -53,14 +49,14 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
                     <>
                         <StyledCircle className="former-shadow" cx={start.x} cy={start.y} r="10" />
                         <StyledLine x1={start.x} y1={start.y} x2={end.x} y2={end.y} />
-                        <StyledCircle onClick={handleClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
+                        <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
                     </>
                 );
             }
-            return <StyledCircle onClick={handleClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
+            return <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
         }
 
-        return <StyledCircle onClick={handleClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
+        return <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
     }
 
     return useObserver(() => renderContent());

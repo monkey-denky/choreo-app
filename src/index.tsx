@@ -2,12 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { StoreProvider, Store } from './helpers/storeProvider';
-import { enableLogging } from 'mobx-logger';
+import { StoreProvider, RootStore } from './helpers/storeProvider';
 
-const store = new Store();
-
-enableLogging({ reaction: false });
+const store = new RootStore();
 
 ReactDOM.render(
     <React.StrictMode>

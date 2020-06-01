@@ -1,5 +1,5 @@
 import { action, observable, computed } from 'mobx';
-import { Store as Root } from '../../helpers/storeProvider';
+import { RootStore } from '../../helpers/storeProvider';
 
 interface Properties {
     width?: number;
@@ -15,8 +15,8 @@ interface Coords {
     y: number;
 }
 
-export default class Store {
-    root: Root;
+export default class BoardStore {
+    root: RootStore;
 
     @observable
     width = 7;
@@ -42,7 +42,7 @@ export default class Store {
     @observable
     y = 0;
 
-    constructor(root: Root) {
+    constructor(root: RootStore) {
         this.root = root;
     }
 

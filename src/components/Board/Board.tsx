@@ -5,6 +5,7 @@ import { useStore } from '../../helpers/useStore';
 import { useObserver } from 'mobx-react-lite';
 import Dancer from '../Dancer';
 import BoardClass from './store';
+import { store as DancerStore } from '../Dancer';
 
 type BoardProps = {
     board: BoardClass;
@@ -12,7 +13,6 @@ type BoardProps = {
 
 const Board: React.FC<BoardProps> = ({ board }) => {
     const store = useStore();
-    const [entered, setEntered] = useState<boolean>(false);
 
     const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -26,55 +26,37 @@ const Board: React.FC<BoardProps> = ({ board }) => {
 
     function onMouseMove(event: React.MouseEvent): void {
         const { clientX, clientY } = event;
-        event.stopPropagation();
-        event.preventDefault();
-        if (entered) {
-            board.changeCoords(clientX, clientY);
+        if (store.selectedDancer) {
+            event.stopPropagation();
+            event.preventDefault();
         }
+        board.changeCoords(clientX, clientY);
     }
 
     function onMouseUp(event: React.MouseEvent) {
-        event.stopPropagation();
-        event.preventDefault();
         if (store.selectedDancer) {
+            event.stopPropagation();
+            event.preventDefault();
             const { x, y } = store.board.roundedCoords;
             store.selectedDancer.changeCoords(x, y);
             if (store.tools.selected === ToolType.Transition) {
                 store.selectedDancer.addPath(x, y);
-                store.selectedDancer.setSelected(false);
             }
+            store.selectedDancer.setSelected(false);
         }
     }
 
-    function handleClick() {
-        if (entered) {
-            const { x, y } = board.roundedCoords;
-            switch (store.tools.selected) {
-                case ToolType.Add:
-                    store.addDancer(x, y);
-                    break;
-                default:
-                    return;
-            }
-        }
-    }
-
-    function mouseEnter() {
-        setEntered(true);
-    }
-
-    function mouseLeave() {
-        setEntered(false);
+    function onClick(event: React.MouseEvent) {
+        event.stopPropagation();
+        event.preventDefault();
+        store.tools.preciseClick();
     }
 
     function renderHoverCircle() {
-        if (!entered) {
-            return null;
-        }
         const { x, y } = board.roundedCoords;
         switch (store.tools.selected) {
             case ToolType.Add:
-                return <circle onClick={handleClick} className="hover-circle" cx={x} cy={y} r="10" />;
+                return <circle onClick={onClick} className="hover-circle" cx={x} cy={y} r="7" />;
             default:
                 return null;
         }
@@ -85,9 +67,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
             <svg
                 ref={svgRef}
                 onMouseUp={onMouseUp}
-                onMouseEnter={mouseEnter}
                 onMouseMove={onMouseMove}
-                onMouseLeave={mouseLeave}
                 width="100%"
                 height="100%"
                 xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +85,7 @@ const Board: React.FC<BoardProps> = ({ board }) => {
                     </pattern>
                 </defs>
                 <rect width="100%" height="100%" fill="url(#grid)" />
-                {Object.entries(store.dancers).map(([key, dancer]) => (
+                {Object.entries<DancerStore>(store.dancers).map(([key, dancer]) => (
                     <Dancer key={key} dancer={dancer} />
                 ))}
                 {renderHoverCircle()}

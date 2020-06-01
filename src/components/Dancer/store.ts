@@ -1,5 +1,5 @@
 import { action, observable, computed } from 'mobx';
-import { Store as Root } from '../../helpers/storeProvider';
+import { RootStore } from '../../helpers/storeProvider';
 
 function getId(x: number, y: number): number {
     return ((x + y) * (x + y + 1)) / 2 + x;
@@ -10,8 +10,14 @@ interface Coords {
     y: number;
 }
 
-export default class Store {
-    root: Root;
+export default class DancerStore {
+    static mobxLoggerConfig: {
+        methods: {
+            changeChoords: false;
+        };
+    };
+
+    root: RootStore;
     id: number;
 
     @observable x = 0;
@@ -19,7 +25,7 @@ export default class Store {
     @observable path: Coords[] = [];
     @observable selected = false;
 
-    constructor(root: Root, x: number, y: number) {
+    constructor(root: RootStore, x: number, y: number) {
         this.x = x;
         this.y = y;
         this.id = getId(x, y);
