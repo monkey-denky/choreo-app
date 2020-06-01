@@ -69,9 +69,6 @@ export default class BoardStore {
         const coordY = y - this.yOffset;
         this.x = coordX;
         this.y = coordY;
-        if (this.root.selectedDancer) {
-            this.root.selectedDancer.changeCoords(coordX, coordY);
-        }
     };
 
     @computed

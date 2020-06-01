@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { BoardContainer } from './styled';
 import { ToolType } from '../../helpers/enums';
 import { useStore } from '../../helpers/useStore';
@@ -46,17 +46,13 @@ const Board: React.FC<BoardProps> = ({ board }) => {
         }
     }
 
-    function onClick(event: React.MouseEvent) {
-        event.stopPropagation();
-        event.preventDefault();
-        store.tools.preciseClick();
-    }
-
     function renderHoverCircle() {
         const { x, y } = board.roundedCoords;
         switch (store.tools.selected) {
             case ToolType.Add:
-                return <circle onClick={onClick} className="hover-circle" cx={x} cy={y} r="7" />;
+                return (
+                    <circle onClick={store.tools.mouseEvents.onClick} className="hover-circle" cx={x} cy={y} r="7" />
+                );
             default:
                 return null;
         }
@@ -66,8 +62,9 @@ const Board: React.FC<BoardProps> = ({ board }) => {
         <BoardContainer width={board.scaledWidth} height={board.scaledHeight}>
             <svg
                 ref={svgRef}
-                onMouseUp={onMouseUp}
-                onMouseMove={onMouseMove}
+                onMouseUp={store.tools.mouseEvents.onMouseUp}
+                onMouseMove={store.tools.mouseEvents.onMouseMove}
+                onMouseDown={store.tools.mouseEvents.onMouseDown}
                 width="100%"
                 height="100%"
                 xmlns="http://www.w3.org/2000/svg"

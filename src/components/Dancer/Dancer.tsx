@@ -12,20 +12,6 @@ type DancerProps = {
 const Dancer: React.FC<DancerProps> = ({ dancer }) => {
     const store = useStore();
 
-    function onClick(event: React.MouseEvent) {
-        event.preventDefault();
-        event.stopPropagation();
-        store.tools.preciseClick();
-    }
-
-    function onMouseDown(event: React.MouseEvent) {
-        if (store.tools.selected === ToolType.Default || store.tools.selected === ToolType.Transition) {
-            event.preventDefault();
-            event.stopPropagation();
-            dancer.setSelected(true);
-        }
-    }
-
     function renderContent() {
         if (store.tools.selected === ToolType.Transition) {
             // TODO add order number of Transition
@@ -37,7 +23,13 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
                     <>
                         <StyledCircle className="former-shadow" cx={start.x} cy={start.y} r="10" />
                         <StyledLine x1={start.x} y1={start.y} x2={end.x} y2={end.y} />
-                        <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
+                        <StyledCircle
+                            data-id={dancer.id}
+                            onClick={store.tools.mouseEvents.onClick}
+                            cx={end.x}
+                            cy={end.y}
+                            r="10"
+                        />
                     </>
                 );
             }
@@ -49,14 +41,36 @@ const Dancer: React.FC<DancerProps> = ({ dancer }) => {
                     <>
                         <StyledCircle className="former-shadow" cx={start.x} cy={start.y} r="10" />
                         <StyledLine x1={start.x} y1={start.y} x2={end.x} y2={end.y} />
-                        <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={end.x} cy={end.y} r="10" />
+                        <StyledCircle
+                            data-id={dancer.id}
+                            onClick={store.tools.mouseEvents.onClick}
+                            cx={end.x}
+                            cy={end.y}
+                            r="10"
+                        />
                     </>
                 );
             }
-            return <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
+            return (
+                <StyledCircle
+                    data-id={dancer.id}
+                    onClick={store.tools.mouseEvents.onClick}
+                    cx={dancer.x}
+                    cy={dancer.y}
+                    r="10"
+                />
+            );
         }
 
-        return <StyledCircle onClick={onClick} onMouseDown={onMouseDown} cx={dancer.x} cy={dancer.y} r="10" />;
+        return (
+            <StyledCircle
+                data-id={dancer.id}
+                onClick={store.tools.mouseEvents.onClick}
+                cx={dancer.x}
+                cy={dancer.y}
+                r="10"
+            />
+        );
     }
 
     return useObserver(() => renderContent());
